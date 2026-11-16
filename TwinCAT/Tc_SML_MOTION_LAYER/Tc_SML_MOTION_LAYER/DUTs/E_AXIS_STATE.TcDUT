@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="E_AXIS_STATE" Id="{46f50181-36ec-51ae-8ea1-fd192554d6c3}">
+    <Declaration><![CDATA[(* ============================================================
+   E_AXIS_STATE - Axis functional state
+   SML v6 - Level B (new)
+
+   Values that are multiples of 100 (= PROGRESS_SPAN) so they can
+   compose the COMBINED STATE with E_PROGRESS:
+       State.eState = E_AXIS_STATE + E_PROGRESS
+   E.g.: AXIS_STATE_MOVING (500) + PROGRESS_BUSY (2) = 502.
+   Decompose with f_GetState(502)=500, f_GetProgress(502)=2.
+
+   Here Level B finally USES the f_GetState / f_GetProgress
+   functions introduced in Level A.
+   ============================================================ *)
+
+TYPE E_AXIS_STATE :
+(
+    AXIS_STATE_NULL     := 0,     // not initialized
+    AXIS_STATE_INIT     := 100,   // init / reset in progress
+    AXIS_STATE_DISABLED := 200,   // drive disabled
+    AXIS_STATE_IDLE     := 300,   // enabled, stopped, ready
+    AXIS_STATE_HOMING   := 400,   // homing
+    AXIS_STATE_MOVING   := 500,   // Profile Position / CSP
+    AXIS_STATE_VELOCITY := 600,   // Profile Velocity / Jog
+    AXIS_STATE_STOPPING := 700,   // Halt
+    AXIS_STATE_ERROR    := 900    // error
+) INT;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

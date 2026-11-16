@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="U_AXIS_INFO" Id="{63b9aff2-be3b-54f7-807d-c998f1c06a93}">
+    <Declaration><![CDATA[(* ============================================================
+   U_AXIS_INFO - Bus UNION for the axis info
+   SML v8 - Level B / MAPPING (new)
+
+   stData : ST_AXIS_INFO (typed) / aRaw : byte block (fieldbus).
+   Fixed size = MAP_SIZE_INFO (>= SIZEOF(ST_AXIS_INFO)).
+   ============================================================ *)
+
+TYPE U_AXIS_INFO :
+UNION
+    stData : ST_AXIS_INFO;
+    aRaw   : ARRAY[1..GVL_SML_CONST.MAP_SIZE_INFO] OF BYTE;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_DriveIn" Id="{aa4d50bd-c21c-571c-9811-64be9c42db9b}">
+    <Declaration><![CDATA[(* ============================================================
+   ST_DriveIn - INPUT process image (Drive -> PLC)
+   SML v9 - I/O bridge (new)
+
+   The "input" half of OpenSML_Axis, SAME order and same types.
+   Used for the I/O bridge: declared AT %I* (mapped to the drive's
+   TxPDOs) and copied into GVL_AXIS.Axis[n] before the computation.
+
+   Valid for both CoDeSys and TwinCAT (generic IEC 61131-3 ST).
+   ============================================================ *)
+
+TYPE ST_DriveIn :
+STRUCT
+    StatusWord                   : UINT;   // 0x6041
+    Modes_of_operation_display   : SINT;   // 0x6061
+    Torque_Actual_Value          : INT;    // 0x6077 [0.1 % rated]
+    Position_Actual_Value        : DINT;   // 0x6064 [encoder counts]
+    Velocity_Actual_Value        : DINT;   // 0x606C [drive velocity units]
+    Current_Actual_Value         : INT;    // 0x6078 [0.1 % rated]
+    Following_Error_Actual_Value : DINT;   // 0x60F4 [encoder counts]
+    Error_Code                   : UINT;   // 0x603F [0 = no error]
+    Digital_Inputs               : UDINT;  // 0x60FD [DI bitmask]
+    TouchProbe_StatusWord        : UINT;   // 0x60B9
+    TouchProbe_Rising_Value      : DINT;   // 0x60BA [encoder counts]
+    TouchProbe_Falling_Value     : DINT;   // 0x60BB [encoder counts]
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

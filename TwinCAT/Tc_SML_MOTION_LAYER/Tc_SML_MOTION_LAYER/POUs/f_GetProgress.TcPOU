@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="f_GetProgress" Id="{ff6e03e8-34bd-54c5-92e4-9f5923abfa80}">
+    <Declaration><![CDATA[(* ============================================================
+   f_GetProgress - Extracts the progress from a combined state
+   SML v5 - Level A (new)
+
+   eCombined = functional_state + E_PROGRESS  (progress band = 0..99)
+   Returns only the progress part.
+
+   Level B groundwork: not used by the Level A projection, provided
+   as infrastructure for the combined state.
+   ============================================================ *)
+
+FUNCTION f_GetProgress : E_PROGRESS
+VAR_INPUT
+    eCombined : DINT;   // combined state = functional_state + progress
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[f_GetProgress := TO_INT(eCombined MOD GVL_SML_CONST.PROGRESS_SPAN);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

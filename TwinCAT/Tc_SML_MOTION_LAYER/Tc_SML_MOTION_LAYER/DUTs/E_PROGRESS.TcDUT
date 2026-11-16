@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="E_PROGRESS" Id="{1c141748-9674-50b1-ba69-61410fe82b28}">
+    <Declaration><![CDATA[(* ============================================================
+   E_PROGRESS - Unified progress for all SML FBs
+   SML v5 - Level A (new)
+
+   Common progress vocabulary, readable by application / HMI /
+   diagnostics, replacing the ad-hoc iState:INT semantics used by
+   the individual FBs.
+
+   PROJECTION (Level A):
+     Each FB keeps its own iState state machine unchanged and, at
+     the end of the cycle, exposes eProgress:E_PROGRESS by deriving
+     it from iState and from its own flags (xError / xDone / ...).
+     No state machine is rewritten.
+
+   COMBINED STATE (Level B groundwork):
+     A machine state can be encoded as
+       functional_state + E_PROGRESS
+     with functional_state a multiple of 100 (see f_GetState /
+     f_GetProgress). Not used yet in Level A.
+   ============================================================ *)
+
+TYPE E_PROGRESS :
+(
+    PROGRESS_INVALID := 0,   // not initialized / idle, no request
+    PROGRESS_INIT    := 1,   // start request received
+    PROGRESS_BUSY    := 2,   // processing
+    PROGRESS_PREPARE := 3,   // preparing parameters / preconditions
+    PROGRESS_STARTUP := 4,   // running the startup phase
+    PROGRESS_CHECK   := 5,   // verifying result / advancing index
+    PROGRESS_DONE    := 6,   // completed successfully
+    PROGRESS_ERROR   := 7    // error (terminal until reset)
+) INT;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

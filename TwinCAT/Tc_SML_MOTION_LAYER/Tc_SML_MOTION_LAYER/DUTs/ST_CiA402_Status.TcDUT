@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_CiA402_Status" Id="{223939bb-9463-5d34-8f2f-ad9093dec739}">
+    <Declaration><![CDATA[(* ============================================================
+   ST_CiA402_Status - Full CiA402 status decoder
+   SML v9 - Level B (new)
+
+   Mirrors the outputs of the SML_Status decoder, made available in
+   the data contract as a sub-struct of ST_AXIS_INFO (Info.Status).
+   Brings into FB_AxisCtrl the granular status bits that used to be
+   exposed only by FB_SML.
+   ============================================================ *)
+
+TYPE ST_CiA402_Status :
+STRUCT
+    // -- CiA402 state machine ----------------------------------
+    NotReadyToSwitchOn  : BOOL;
+    SwitchOnDisabled    : BOOL;
+    ReadyToSwitchOn     : BOOL;
+    SwitchedOn          : BOOL;
+    OperationEnabled    : BOOL;
+    QuickStopActive     : BOOL;
+    FaultReactionActive : BOOL;
+    Fault               : BOOL;
+
+    // -- general status ----------------------------------------
+    Warning             : BOOL;   // bit 7
+    TargetReached       : BOOL;   // bit 10 (mode-dependent)
+    Halted              : BOOL;
+    VoltageEnabled      : BOOL;   // bit 4
+    InternalLimit       : BOOL;   // bit 11
+
+    // -- active operating mode ---------------------------------
+    ProfilePositionMode : BOOL;   // 1
+    ProfileVelocityMode : BOOL;   // 3
+    VelocityMode        : BOOL;   // 2 (legacy)
+    TorqueProfileMode   : BOOL;   // 4
+    HomingMode          : BOOL;   // 6
+    SyncPositionMode    : BOOL;   // 8 (CSP)
+    SyncVelocityMode    : BOOL;   // 9 (CSV)
+
+    // -- motion ------------------------------------------------
+    Moving              : BOOL;
+    StandStill          : BOOL;
+    Homed               : BOOL;
+
+    // -- error / detail ----------------------------------------
+    Err                 : BOOL;   // Error_Code != 0
+    ErrId               : UINT;   // 0x603F
+    ActTorque           : INT;    // 0x6077 [0.1% of rated]
+    FollowingError      : DINT;   // 0x60F4 [encoder counts]
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

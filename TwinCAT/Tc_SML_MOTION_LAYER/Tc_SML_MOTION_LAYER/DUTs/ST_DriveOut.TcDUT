@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_DriveOut" Id="{0c28d66f-5582-570e-a0cb-b414243b1f1c}">
+    <Declaration><![CDATA[(* ============================================================
+   ST_DriveOut - OUTPUT process image (PLC -> Drive)
+   SML v9 - I/O bridge (new)
+
+   The "output" half of OpenSML_Axis, SAME order and same types.
+   Used for the I/O bridge: declared AT %Q* (mapped to the drive's
+   RxPDOs) and copied from GVL_AXIS.Axis[n] after the computation.
+
+   Valid for both CoDeSys and TwinCAT (generic IEC 61131-3 ST).
+   On CoDeSys, as an alternative, you can directly link
+   GVL_AXIS.Axis[n].<member> in the I/O Mapping tab (no bridge).
+   ============================================================ *)
+
+TYPE ST_DriveOut :
+STRUCT
+    ControlWord            : UINT;   // 0x6040
+    Modes_of_operation     : SINT;   // 0x6060
+    Target_Position        : DINT;   // 0x607A [encoder counts]
+    Profile_Velocity       : UDINT;  // 0x6081 [drive velocity units - PP]
+    Target_Velocity        : DINT;   // 0x60FF [drive velocity units - PV/CSV]
+    Target_Torque          : INT;    // 0x6071 [0.1 % rated]
+    Profile_Acceleration   : UDINT;  // 0x6083 [drive accel units]
+    Profile_Deceleration   : UDINT;  // 0x6084 [drive accel units]
+    Home_Offset            : DINT;   // 0x607C [encoder counts]
+    TouchProbe_ControlWord : UINT;   // 0x60B8
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="E_AXIS_CTRL" Id="{74dd4327-82bb-5415-b934-05c8b0b4a398}">
+    <Declaration><![CDATA[(* ============================================================
+   E_AXIS_CTRL - Axis command (eCmd) for FB_AxisCtrl
+   SML v6 - Level B (new)
+
+   Level-based command enum: the application writes Ctrl.eCmd;
+   FB_AxisCtrl routes the command to the corresponding leaf FB.
+   One command at a time => no explicit arbiter (the single value
+   of eCmd IS the arbiter).
+
+   Analogous to E_AXIS_CTRL of PLC_MOTION_LAYER, but the commands
+   map onto SML's CiA402 FBs instead of the Beckhoff MC_*.
+   ============================================================ *)
+
+TYPE E_AXIS_CTRL :
+(
+    AXIS_NULL          := 0,    // no command: holds the current state
+    AXIS_ENABLE        := 1,    // enable drive (Power) and stay idle
+    AXIS_DISABLE       := 2,    // disable drive
+    AXIS_RESET         := 3,    // fault reset (drive + leaf FBs)
+    AXIS_HOME          := 4,    // homing
+    AXIS_MOVE_ABS      := 5,    // absolute Profile Position
+    AXIS_MOVE_REL      := 6,    // relative Profile Position
+    AXIS_MOVE_VELOCITY := 7,    // Profile Velocity (signed velocity)
+    AXIS_JOG_POS       := 8,    // jog positive (held)
+    AXIS_JOG_NEG       := 9,    // jog negative (held)
+    AXIS_MOVE_CSP      := 10,   // CSP (mode 8) + OTG toward Data.lrTargetPosition
+    AXIS_STOP          := 11    // Halt (controlled deceleration)
+) INT;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

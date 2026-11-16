@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="U_MOVE_DATA" Id="{045c383b-f9e8-5e58-ab06-13aed8891a21}">
+    <Declaration><![CDATA[(* ============================================================
+   U_MOVE_DATA - Bus UNION for the motion setpoints
+   SML v8 - Level B / MAPPING (new)
+
+   stData : ST_MOVE_DATA (typed) / aRaw : byte block (fieldbus).
+   Fixed size = MAP_SIZE_DATA (>= SIZEOF(ST_MOVE_DATA)).
+   ============================================================ *)
+
+TYPE U_MOVE_DATA :
+UNION
+    stData : ST_MOVE_DATA;
+    aRaw   : ARRAY[1..GVL_SML_CONST.MAP_SIZE_DATA] OF BYTE;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

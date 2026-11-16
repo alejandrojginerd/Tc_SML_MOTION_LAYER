@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_AXIS_STATE" Id="{0eb21c92-0919-5bb7-922c-22d2ec786c90}">
+    <Declaration><![CDATA[(* ============================================================
+   ST_AXIS_STATE - State structure (layer -> app)
+   SML v6 - Level B (new)
+
+   The "State" data contract. Command result + progress.
+   eState is the COMBINED STATE (E_AXIS_STATE + E_PROGRESS);
+   use f_GetState / f_GetProgress to decompose it.
+   ============================================================ *)
+
+TYPE ST_AXIS_STATE :
+STRUCT
+    eState         : INT;            // combined state = E_AXIS_STATE + E_PROGRESS
+    eProgress      : E_PROGRESS;     // progress (handy, already decomposed)
+    eCmdActive     : E_AXIS_CTRL;    // command being executed
+    xDone          : BOOL;           // current command complete
+    xError         : BOOL;           // aggregated error
+
+    // -- diagnostics (from SML_Diagnostics) -------------------
+    DiagCode       : SML_DiagCode;
+    DiagText       : STRING(80);
+    FirstFaultCode : SML_DiagCode;
+    FirstFaultText : STRING(80);
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

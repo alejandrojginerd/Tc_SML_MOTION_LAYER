@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="SML_Stop" Id="{9f986fae-23f8-5b38-97f4-2e49fcc60379}">
+    <Declaration><![CDATA[(* ============================================================
+   SML_Stop - CiA402 Halt (software controlled stop)
+   SML v4 - Merged (OpenSML_Stop + Confa SML_Stop + xStopped output)
+
+   Sets ControlWord bit 8 (Halt):
+   - xStop = TRUE : drive decelerates to zero using Profile_Deceleration;
+     drive stays in OperationEnabled and holds position
+   - xStop = FALSE: motion FBs can resume commanding the axis
+
+   This is a SOFT stop - the axis decelerates under control.
+   For an emergency HARD stop use xEmergencyStop = FALSE via
+   SML_Power (sets ControlWord bit 2 = 0 -> quick-stop deceleration).
+
+   xStopped: TRUE when Halt is active AND the drive reports that
+   velocity has reached zero.  StatusWord bit 10 meaning is
+   operating-mode dependent - verify against your drive datasheet.
+   ============================================================ *)
+
+FUNCTION_BLOCK SML_Stop
+VAR_IN_OUT
+    Axis : OpenSML_Axis;
+END_VAR
+VAR_INPUT
+    xStop : BOOL; // TRUE = activate Halt; FALSE = release Halt
+END_VAR
+VAR_OUTPUT
+    xStopped : BOOL; // TRUE when Halt active and drive reports standstill
+    eProgress : E_PROGRESS; // Level A: unified progress
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// -- Halt bit (ControlWord bit 8) - every cycle ----------------------------
+Axis.ControlWord.8 := xStop;
+
+// -- Standstill confirmation -----------------------------------------------
+// Only meaningful while xStop is active.
+// Bit 10 = "Target Reached" in PP mode, "At Velocity" in PV mode,
+// and "Drive Halted" / "Speed Zero" on many drives in Halt condition.
+xStopped := xStop AND Axis.StatusWord.10;
+
+// -- Level A: unified progress projection (E_PROGRESS) --------------
+IF    NOT xStop  THEN eProgress := PROGRESS_INVALID;
+ELSIF xStopped   THEN eProgress := PROGRESS_DONE;
+ELSE                  eProgress := PROGRESS_BUSY;   // decelerating
+END_IF
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

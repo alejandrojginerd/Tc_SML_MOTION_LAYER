@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_AXIS_CTRL" Id="{4ad90f04-25db-5f4b-a7d8-84474fec63ea}">
+    <Declaration><![CDATA[(* ============================================================
+   ST_AXIS_CTRL - Command structure (app -> layer)
+   SML v6 - Level B (new)
+
+   The "Ctrl" data contract of the Motion Layer pattern. A flat,
+   serializable structure (no pointer/interface inside): accessible
+   via ADS symbol or copyable onto a bus (MAPPING groundwork).
+
+   The eCmd command is level-based. Motion parameters live in
+   ST_MOVE_DATA ("Data").
+   ============================================================ *)
+
+TYPE ST_AXIS_CTRL :
+STRUCT
+    eCmd           : E_AXIS_CTRL;        // requested command
+    xEmergencyStop : BOOL := TRUE;       // TRUE = run / FALSE = quick-stop (CiA402 bit 2)
+    xSimulation    : BOOL;               // mirror Target_Position -> Position_Actual_Value
+
+    // -- configuration (rarely changed) -----------------------
+    Scale          : LREAL := 4096.0;    // [counts/unit] - must be > 0
+    CycleTime      : LREAL := 0.001;     // [s] - must match the task (OTG)
+    PositionWindow : LREAL := 0.01;      // in-position deadband [units]
+    HomeOffset     : DINT  := 0;         // homing offset [encoder counts] -> 0x607C
+
+    // -- TouchProbe (parallel to motion, not an eCmd) ----------
+    xTouchProbeEnable  : BOOL;           // arm the TouchProbe hardware
+    xTouchProbeRising  : BOOL;           // arm the latch on the rising edge
+    xTouchProbeFalling : BOOL;           // arm the latch on the falling edge
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

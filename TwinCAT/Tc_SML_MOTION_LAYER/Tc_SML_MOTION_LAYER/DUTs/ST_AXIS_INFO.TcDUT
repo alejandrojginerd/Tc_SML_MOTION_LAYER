@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_AXIS_INFO" Id="{c7ccade7-92c3-59fd-a4b6-b25c9ac9bc58}">
+    <Declaration><![CDATA[(* ============================================================
+   ST_AXIS_INFO - Info structure (layer -> app)
+   SML v6 - Level B (new)
+
+   The "Info" data contract. Actual values and axis status bits,
+   in user units.
+   ============================================================ *)
+
+TYPE ST_AXIS_INFO :
+STRUCT
+    lrActualPosition : LREAL;    // actual position [units]
+    lrActualVelocity : LREAL;    // actual velocity [units/s]
+    xEnabled         : BOOL;     // drive in OperationEnabled
+    xHomed           : BOOL;     // homing done at least once (latch)
+    xMoving          : BOOL;     // axis is moving
+    xInPosition      : BOOL;     // within PositionWindow (CSP path)
+
+    // -- full CiA402 decoder (from SML_Status) -----------------
+    Status           : ST_CiA402_Status;
+
+    // -- TouchProbe results (from SML_TouchProbe) --------------
+    xTouchProbeDoneR       : BOOL;
+    xTouchProbeDoneF       : BOOL;
+    xTouchProbeBusy        : BOOL;
+    xTouchProbeError       : BOOL;
+    TouchProbeRisingValue  : DINT;   // [encoder counts]
+    TouchProbeFallingValue : DINT;   // [encoder counts]
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

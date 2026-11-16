@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_MOVE_DATA" Id="{294f357f-3aa8-50ab-9f3a-14fd3a4a98ff}">
+    <Declaration><![CDATA[(* ============================================================
+   ST_MOVE_DATA - Setpoints and dynamic limits (app -> layer)
+   SML v6 - Level B (new)
+
+   The "Data" data contract. All values are in USER UNITS (LREAL).
+   FB_AxisCtrl converts to the drive's raw units via Ctrl.Scale
+   before passing them to the leaf FBs (PP/PV/Jog); the CSP/OTG
+   path works directly in user units.
+
+   Scaling note: velocity/acceleration scale is assumed equal to
+   position scale (multiply by Scale). For drives whose velocity
+   units 0x6081/0x60FF differ, refine the conversion in the FB.
+   ============================================================ *)
+
+TYPE ST_MOVE_DATA :
+STRUCT
+    lrTargetPosition : LREAL;              // target [units] for MOVE_ABS/REL/CSP
+    lrVelocity       : LREAL := 10.0;      // velocity [units/s]; signed for MOVE_VELOCITY
+    lrAcceleration   : LREAL := 1000.0;    // [units/s^2]
+    lrDeceleration   : LREAL := 1000.0;    // [units/s^2]
+    lrJerk           : LREAL := 10000.0;   // [units/s^3] - CSP/OTG only
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
